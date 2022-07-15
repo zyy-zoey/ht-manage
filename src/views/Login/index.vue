@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
 export default {
   created () { },
   data () {
@@ -32,7 +31,7 @@ export default {
       loginForm: {
         // 字段名都是和接口文档保持一致
         username: 'admin',
-        password: '123'
+        password: '123456'
       },
       rules: {
         username: [
@@ -57,8 +56,8 @@ export default {
       try {
         await this.$refs.loginFormRef.validate()
         try {
-          const res = await login(this.loginForm)
-          console.log(res)
+          this.$store.dispatch('user/Token', this.loginForm)
+          // console.log(this.token)
           this.$router.push('/home')
         } catch (err) {
           console.log(err)
@@ -68,7 +67,9 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+
+  },
   watch: {},
   filters: {},
   components: {}

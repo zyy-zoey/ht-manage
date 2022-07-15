@@ -11,7 +11,7 @@
           <span>biubiubiu后台管理系统</span>
         </div>
         <el-row>
-          <el-button>退出</el-button>
+          <el-button @click="deltoken">退出</el-button>
         </el-row>
       </el-header>
       <el-container>
@@ -27,48 +27,69 @@
           <el-menu
             background-color="#373d41"
             text-color="#fff"
-            unique-opened
+            :unique-opened="true"
             :collapse="isCollapse"
+            :collapse-transition="false"
+            router
+            :default-active="this.$route.path"
           >
-            <el-submenu index="1">
+            <el-submenu
+              :index="item.path"
+              v-for="item in firstList"
+              :key="item.id"
+            >
               <template slot="title">
                 <i class="el-icon-location"></i>
-                <span slot="title">导航一</span>
+                <span slot="title">{{ item.authName }}</span>
               </template>
-              <el-menu-item-group>
-                <span slot="title">分组一</span>
-                <el-menu-item index="1-1">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="分组2">
-                <el-menu-item index="1-3">选项3</el-menu-item>
-              </el-menu-item-group>
-              <el-submenu index="1-4">
-                <span slot="title">选项4</span>
-                <el-menu-item index="1-4-1">选项1</el-menu-item>
-              </el-submenu>
+              <el-menu-item
+                :index="item1.path"
+                v-for="item1 in item.children"
+                :key="item1.id"
+                ><i>{{ item1.authName }}</i></el-menu-item
+              >
             </el-submenu>
           </el-menu>
         </el-aside>
-        <el-main>Main</el-main>
+        <el-main>
+          <breadCrumb></breadCrumb>
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
+import { getMenus } from '@/api/home'
+import breadCrumb from '@/components/breadCrumb.vue'
 export default {
-  created () { },
-  data () {
-    return {
-      isCollapse: false
+  async created () {
+    try {
+      const res = await getMenus()
+      console.log('home res', res)
+      this.firstList = res.data.data
+      console.log(this.firstList)
+    } catch (err) {
+      console.log(err)
     }
   },
-  methods: {},
+  data () {
+    return {
+      isCollapse: false,
+      firstList: ''
+    }
+  },
+  methods: {
+    deltoken () {
+      this.$store.commit('setToken', '')
+      this.$router.back()
+    }
+  },
   computed: {},
   watch: {},
   filters: {},
-  components: {}
+  components: { breadCrumb }
 }
 </script>
 
