@@ -64,15 +64,8 @@
 import { getMenus } from '@/api/home'
 import breadCrumb from '@/components/breadCrumb.vue'
 export default {
-  async created () {
-    try {
-      const res = await getMenus()
-      console.log('home res', res)
-      this.firstList = res.data.data
-      console.log(this.firstList)
-    } catch (err) {
-      console.log(err)
-    }
+  created () {
+    this.getMenus()
   },
   data () {
     return {
@@ -81,6 +74,12 @@ export default {
     }
   },
   methods: {
+    async getMenus () {
+      const res = await getMenus()
+      console.log('home res', res)
+      this.firstList = res.data.data
+      // console.log(this.firstList)
+    },
     deltoken () {
       this.$store.commit('setToken', '')
       this.$router.back()

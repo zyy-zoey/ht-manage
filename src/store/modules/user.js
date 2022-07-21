@@ -14,7 +14,7 @@ const actions = {
     try {
       const res = await login(data)
       context.commit('setToken', res.data.data.token)
-      console.log('111', res)
+      console.log('login', res)
     } catch (err) {
       console.log(err)
     }

@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   created () { },
   data () {
@@ -46,25 +47,32 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['user/Token']),
     reset () {
       // 1. 获取表单组件实现对象
       // 对整个表单进行重置，将所有字段值重置为初始
       this.$refs.loginFormRef.resetFields()
     },
     async login () {
-      // 二次校验 手动校验
-      try {
-        await this.$refs.loginFormRef.validate()
-        try {
-          this.$store.dispatch('user/Token', this.loginForm)
-          // console.log(this.token)
+      this.$refs.loginFormRef.validate(async isOk => {
+        if (isOk) {
+          await this['user/Token'](this.loginForm)
           this.$router.push('/home')
-        } catch (err) {
-          console.log(err)
         }
-      } catch (err) {
-        this.$message.error('登录表单校验失败')
-      }
+      })
+      // 二次校验 手动校验
+      // try {
+      //   await this.$refs.loginFormRef.validate()
+      //   try {
+      //     this.$store.dispatch('user/Token', this.loginForm)
+      //     // console.log(this.token)
+      //     this.$router.push('/home')
+      //   } catch (err) {
+      //     console.log(err)
+      //   }
+      // } catch (err) {
+      //   this.$message.error('登录表单校验失败')
+      // }
     }
   },
   computed: {
