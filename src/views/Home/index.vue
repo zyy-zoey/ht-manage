@@ -76,7 +76,7 @@ export default {
   methods: {
     async getMenus () {
       const res = await getMenus()
-      console.log('home res', res)
+      // console.log('home res', res)
       this.firstList = res.data.data
       // console.log(this.firstList)
     },

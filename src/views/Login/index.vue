@@ -58,6 +58,7 @@ export default {
         if (isOk) {
           await this['user/Token'](this.loginForm)
           this.$router.push('/home')
+          this.$message.success('登录成功')
         }
       })
       // 二次校验 手动校验
